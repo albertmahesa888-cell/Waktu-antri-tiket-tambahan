@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SO7 Waiting Room</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+}
+
+/* BACKGROUND IMAGE */
+
+.bg{
+position:absolute;
+width:100%;
+height:100%;
+background:url('background.jpg') center center/cover no-repeat;
+filter:brightness(.35);
+transform:scale(1.1);
+animation:bgzoom 15s ease-in-out infinite alternate;
+}
+
+@keyframes bgzoom{
+0%{
+transform:scale(1.1);
+}
+100%{
+transform:scale(1.25);
+}
+}
+
+/* PARTICLES */
+
+.particles span{
+position:absolute;
+display:block;
+width:4px;
+height:4px;
+background:#00ffd5;
+border-radius:50%;
+animation:float 15s linear infinite;
+opacity:.7;
+}
+
+@keyframes float{
+0%{
+transform:translateY(100vh) scale(0);
+opacity:0;
+}
+10%{
+opacity:1;
+}
+100%{
+transform:translateY(-100vh) scale(1.5);
+opacity:0;
+}
+}
+
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:
+linear-gradient(to bottom,
+rgba(0,0,0,.75),
+rgba(0,0,0,.88));
+backdrop-filter:blur(4px);
+}
+
+/* MAIN */
+
+.container{
+position:relative;
+z-index:5;
+width:95%;
+max-width:520px;
+border-radius:35px;
+padding:28px;
+background:rgba(15,15,15,.55);
+border:1px solid rgba(0,255,200,.2);
+backdrop-filter:blur(18px);
+box-shadow:
+0 0 30px rgba(0,255,200,.15),
+0 0 80px rgba(0,255,200,.08);
+overflow:hidden;
+animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+from{
+transform:translateY(40px);
+opacity:0;
+}
+to{
+transform:translateY(0);
+opacity:1;
+}
+}
+
+/* SCAN EFFECT */
+
+.container::before{
+content:'';
+position:absolute;
+top:-100%;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(
+to bottom,
+transparent,
+rgba(0,255,200,.09),
+transparent);
+animation:scan 6s linear infinite;
+}
+
+@keyframes scan{
+100%{
+top:120%;
+}
+}
+
+/* HEADER */
+
+.banner{
+width:100%;
+height:180px;
+object-fit:cover;
+border-radius:22px;
+margin-bottom:20px;
+box-shadow:0 0 35px rgba(0,255,200,.25);
+animation:bannerFloat 4s ease-in-out infinite;
+}
+
+@keyframes bannerFloat{
+0%{
+transform:translateY(0px);
+}
+50%{
+transform:translateY(-6px);
+}
+100%{
+transform:translateY(0px);
+}
+}
+
+.title{
+text-align:center;
+font-size:34px;
+font-weight:800;
+color:#00ffd5;
+letter-spacing:2px;
+text-shadow:0 0 25px #00ffd5;
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{
+text-shadow:0 0 10px #00ffd5;
+}
+to{
+text-shadow:
+0 0 20px #00ffd5,
+0 0 40px #00ffd5;
+}
+}
+
+.subtitle{
+text-align:center;
+margin-top:8px;
+font-size:14px;
+color:#ccc;
+margin-bottom:25px;
+}
+
+/* LIVE */
+
+.live{
+display:flex;
+align-items:center;
+gap:8px;
+margin-bottom:18px;
+font-size:13px;
+color:#ddd;
+}
+
+.dot{
+width:10px;
+height:10px;
+background:#00ff80;
+border-radius:50%;
+animation:blink 1s infinite;
+box-shadow:0 0 10px #00ff80;
+}
+
+@keyframes blink{
+50%{
+opacity:.2;
+}
+}
+
+/* QUEUE BOX */
+
+.queue-box{
+padding:28px;
+border-radius:25px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.08);
+position:relative;
+overflow:hidden;
+}
+
+.queue-title{
+font-size:18px;
+text-align:center;
+color:#aaa;
+margin-bottom:12px;
+}
+
+.queue{
+font-size:75px;
+font-weight:800;
+text-align:center;
+color:#00ffd5;
+text-shadow:0 0 25px #00ffd5;
+animation:pulse 1.3s infinite;
+}
+
+@keyframes pulse{
+50%{
+transform:scale(1.04);
+}
+}
+
+.est{
+text-align:center;
+margin-top:10px;
+color:#ffd000;
+font-weight:600;
+font-size:14px;
+}
+
+/* BAR */
+
+.progress{
+margin-top:24px;
+}
+
+.bar{
+height:18px;
+background:#111;
+border-radius:30px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,.05);
+}
+
+.fill{
+height:100%;
+width:0%;
+background:
+linear-gradient(90deg,
+#00ffd5,
+#00ff95,
+#00ffd5);
+background-size:300%;
+animation:moveGradient 3s linear infinite;
+border-radius:30px;
+box-shadow:0 0 20px #00ffd5;
+transition:.8s;
+}
+
+@keyframes moveGradient{
+0%{
+background-position:0%;
+}
+100%{
+background-position:300%;
+}
+}
+
+.timer{
+text-align:center;
+margin-top:14px;
+font-size:19px;
+font-weight:700;
+color:#00ffd5;
+}
+
+/* TICKETS */
+
+.section{
+margin-top:28px;
+font-size:20px;
+font-weight:700;
+color:#00ffd5;
+}
+
+.ticket{
+margin-top:14px;
+padding:18px;
+border-radius:20px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.05);
+transition:.4s;
+position:relative;
+overflow:hidden;
+}
+
+.ticket:hover{
+transform:translateY(-4px) scale(1.02);
+border-color:#00ffd5;
+box-shadow:0 0 25px rgba(0,255,200,.18);
+}
+
+.ticket::before{
+content:'';
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:-100%;
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.05),
+transparent);
+transition:.8s;
+}
+
+.ticket:hover::before{
+left:100%;
+}
+
+.ticket h3{
+font-size:18px;
+margin-bottom:6px;
+color:#fff;
+}
+
+.ticket p{
+color:#bbb;
+font-size:14px;
+}
+
+.badge{
+display:inline-block;
+margin-top:10px;
+padding:7px 14px;
+border-radius:14px;
+font-size:12px;
+font-weight:700;
+}
+
+.sale{
+background:#00ff8030;
+color:#00ff80;
+}
+
+.sold{
+background:#ff000025;
+color:#ff6565;
+}
+
+/* BUTTON */
+
+.buy{
+margin-top:25px;
+width:100%;
+padding:20px;
+border:none;
+border-radius:18px;
+font-size:20px;
+font-weight:800;
+letter-spacing:1px;
+background:#2a2a2a;
+color:#777;
+cursor:not-allowed;
+transition:.4s;
+position:relative;
+overflow:hidden;
+}
+
+.buy.active{
+background:linear-gradient(
+90deg,
+#00ffd5,
+#00ff95);
+color:#000;
+cursor:pointer;
+box-shadow:0 0 30px rgba(0,255,200,.4);
+}
+
+.buy.active:hover{
+transform:scale(1.03);
+}
+
+.buy.active::before{
+content:'';
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.5),
+transparent);
+animation:btnshine 2s linear infinite;
+}
+
+@keyframes btnshine{
+100%{
+left:100%;
+}
+}
+
+/* FOOTER */
+
+.footer{
+display:flex;
+justify-content:center;
+gap:16px;
+margin-top:25px;
+}
+
+.footer a{
+text-decoration:none;
+padding:12px 16px;
+border-radius:15px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.05);
+color:#aaa;
+transition:.3s;
+}
+
+.footer a.active:hover{
+color:#00ffd5;
+border-color:#00ffd5;
+box-shadow:0 0 15px rgba(0,255,200,.2);
+}
+
+/* ONLINE USERS */
+
+.online{
+position:absolute;
+top:18px;
+right:18px;
+background:rgba(0,255,180,.1);
+border:1px solid rgba(0,255,180,.2);
+padding:10px 14px;
+border-radius:15px;
+font-size:12px;
+color:#00ffd5;
+backdrop-filter:blur(10px);
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="overlay"></div>
+
+<div class="particles">
+<span style="left:5%;animation-delay:0s;"></span>
+<span style="left:15%;animation-delay:2s;"></span>
+<span style="left:25%;animation-delay:4s;"></span>
+<span style="left:35%;animation-delay:1s;"></span>
+<span style="left:45%;animation-delay:6s;"></span>
+<span style="left:55%;animation-delay:3s;"></span>
+<span style="left:65%;animation-delay:5s;"></span>
+<span style="left:75%;animation-delay:1s;"></span>
+<span style="left:85%;animation-delay:4s;"></span>
+<span style="left:95%;animation-delay:2s;"></span>
+</div>
+
+<div class="container">
+
+<div class="online">
+🟢 12.482 USER ONLINE
+</div>
+
+<!-- BANNER SRC -->
+<img src="banner.png" class="banner">
+
+<div class="title">
+SISTEM ANTRIAN
+</div>
+
+<div class="subtitle">
+Tiket Sheila On 7 Bali United Training Center
+</div>
+
+<div class="live">
+<div class="dot"></div>
+LIVE WAITING ROOM ACTIVE
+</div>
+
+<div class="queue-box">
+
+<div class="queue-title">
+ANDA DALAM ANTRIAN
+</div>
+
+<div class="queue" id="queue">
+329
+</div>
+
+<div class="est">
+⏳ ESTIMASI WAKTU 1 JAM
+</div>
+
+<div class="progress">
+
+<div class="bar">
+<div class="fill" id="fill"></div>
+</div>
+
+<div class="timer" id="timer">
+LOADING 03:00
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+CATEGORY TIKET TAMBAHAN
+</div>
+
+<div class="ticket">
+<h3>FAST TRACK — 6 ORANG</h3>
+<p>Rp. 3.510.000</p>
+<span class="badge sale">ON SALE</span>
+</div>
+
+<div class="ticket">
+<h3>PREMIUM — 6 ORANG</h3>
+<p>Rp. 2.510.000</p>
+<span class="badge sale">ON SALE</span>
+</div>
+
+<div class="ticket">
+<h3>FESTIVAL — 6 ORANG</h3>
+<p>Rp. 1.510.000</p>
+<span class="badge sold">SOLD OUT / FULL BOOKED</span>
+</div>
+
+<button class="buy" id="buyBtn" disabled>
+BELI TIKET
+</button>
+
+<div class="footer">
+
+<a class="active"
+href="https://www.instagram.com/poliponi.id?igsh=OXo0OXJzMGp4Nzdv"
+target="_blank">
+Instagram
+</a>
+
+<a href="javascript:void(0)">
+TikTok
+</a>
+
+<a href="javascript:void(0)">
+Discord
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+/* RANDOM QUEUE */
+
+let q = 329;
+let queue = document.getElementById('queue');
+
+setInterval(() => {
+
+let random = Math.floor(Math.random()*9)-4;
+
+q += random;
+
+if(q < 250){
+q = 250;
+}
+
+if(q > 420){
+q = 420;
+}
+
+queue.innerHTML = q;
+
+},1200);
+
+
+/* TIMER */
+
+let total = 180;
+
+let timer = document.getElementById('timer');
+let fill = document.getElementById('fill');
+let buyBtn = document.getElementById('buyBtn');
+
+let interval = setInterval(() => {
+
+total--;
+
+let m = Math.floor(total/60);
+let s = total%60;
+
+if(m < 10){
+m = "0"+m;
+}
+
+if(s < 10){
+s = "0"+s;
+}
+
+timer.innerHTML = "LOADING "+m+":"+s;
+
+let progress = ((180-total)/180)*100;
+
+fill.style.width = progress+"%";
+
+if(total <= 0){
+
+clearInterval(interval);
+
+timer.innerHTML = "AKSES TERSEDIA";
+
+buyBtn.disabled = false;
+
+buyBtn.classList.add('active');
+
+}
+
+},1000);
+
+
+/* BUTTON */
+
+buyBtn.addEventListener('click',()=>{
+
+if(!buyBtn.disabled){
+
+buyBtn.innerHTML = "MEMPROSES...";
+
+setTimeout(()=>{
+
+window.location.href="#";
+
+},1500);
+
+}
+
+});
+
+
+/* RANDOM ONLINE USERS */
+
+setInterval(()=>{
+
+let online = document.querySelector('.online');
+
+let total = Math.floor(Math.random()*4000)+10000;
+
+online.innerHTML = "🟢 "+total.toLocaleString('id-ID')+" USER ONLINE";
+
+},3000);
+
+</script>
+
+</body>
+</html>
